@@ -22,7 +22,7 @@ for p in ports:
 
 
 def animate1(i):
-    arduino.write(1)
+    arduino.write("1")
     # split data into arrays
     raw_data = arduino.readline().rstrip().split(",")
     processed_data = []

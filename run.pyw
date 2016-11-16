@@ -30,9 +30,12 @@ class MainFrame(gui.FrameMain):
 
     def animateMain(self, i, line, xdata, ydata, ax, arduino, y_array):
         if self.pause:
+            arduino.close()
             return
 
-        arduino.write(1)
+        arduino.write("1")
+
+        time.sleep(0.48)
 
         # split data into arrays
         raw_data = arduino.readline().rstrip().split(",")
@@ -46,7 +49,7 @@ class MainFrame(gui.FrameMain):
         for data in raw_data:
             if (index < self.chart_num):
                 new_data = round((float(data) / 1023.0 * 5.0), 3)
-                processed_data += "\t%f" %(new_data)
+                processed_data += "\t%.3f" %(new_data)
                 y_array[index].append(new_data)
             index += 1
 
@@ -54,7 +57,7 @@ class MainFrame(gui.FrameMain):
         print round(recorded_time, 1), processed_data
         # update timer
         self.timerDisplay.SetValue("%d" %(round(recorded_time)))
-        to_be_written = "\n%f%s" %(recorded_time, processed_data)
+        to_be_written = "\n%.3f%s" %(recorded_time, processed_data)
 
         # file I/O
         datafile = open(self.filename, "a")
@@ -208,63 +211,75 @@ class MainFrame(gui.FrameMain):
         print "Waiting for serial communication to initialize..."
         time.sleep(1.5)
 
-        # initialize figure 1
-        fig1 = plt.figure()
+        # check number of charts to decide subplot orientation
+        sp1 = 0
+        sp2 = 0
+
+        if (self.chart_num == 1):
+            sp1 = 111
+        elif (self.chart_num == 2):
+            sp1 = 121
+            sp2 = 122
+        else:
+            sp1 = 221
+            sp2 = 222
+
+
+        fig = plt.figure(figsize=(12,7))
+        # initialize subplot1
+        ax1 = fig.add_subplot(sp1)
         plt.title("Reading 1")
         plt.xlabel("Time (s)")
         plt.ylabel("Y (mV)")
-        ax1 = plt.gca()
 
         ax1.relim()
         ax1.autoscale_view()
 
         y1line, = plt.plot([], [], "r-")
-        ani1 = animation.FuncAnimation(fig1, self.animateMain, fargs=(y1line, xdata, y1data, ax1, arduino, y_array), interval=time_interval)
+        ani1 = animation.FuncAnimation(fig, self.animateMain, fargs=(y1line, xdata, y1data, ax1, arduino, y_array), interval=time_interval)
 
         if (self.chart_num > 1):
-            # initialize figure 2
-            fig2 = plt.figure()
+            # initialize subplot 2
+            ax2 = fig.add_subplot(sp2)
             plt.title("Reading 2")
             plt.xlabel("Time (s)")
             plt.ylabel("Y (mV)")
-            ax2 = plt.gca()
 
             ax2.relim()
             ax2.autoscale_view()
 
             y2line, = plt.plot([], [], "b-")
-            ani2 = animation.FuncAnimation(fig2, self.animateSide, fargs=(y2line, xdata, y2data, ax2), interval=time_interval)
+            ani2 = animation.FuncAnimation(fig, self.animateSide, fargs=(y2line, xdata, y2data, ax2), interval=time_interval)
 
         if (self.chart_num > 2):
-            # initialize figure 3
-            fig3 = plt.figure()
+            # initialize subplot 3
+            ax3 = fig.add_subplot(223)
             plt.title("Reading 3")
             plt.xlabel("Time (s)")
             plt.ylabel("Y (mV)")
-            ax3 = plt.gca()
 
             ax3.relim()
             ax3.autoscale_view()
 
             y3line, = plt.plot([], [], "k-")
-            ani3 = animation.FuncAnimation(fig3, self.animateSide, fargs=(y3line, xdata, y3data, ax3), interval=time_interval)
+            ani3 = animation.FuncAnimation(fig, self.animateSide, fargs=(y3line, xdata, y3data, ax3), interval=time_interval)
         
         if (self.chart_num > 3):
-            # initialize figure 4
-            fig4 = plt.figure()
+            # initialize subplot 4
+            ax4 = fig.add_subplot(224)
             plt.title("Reading 4")
             plt.xlabel("Time (s)")
             plt.ylabel("Y (mV)")
-            ax4 = plt.gca()
 
             ax4.relim()
             ax4.autoscale_view()
 
             y4line, = plt.plot([], [], "m-")
-            ani4 = animation.FuncAnimation(fig4, self.animateSide, fargs=(y4line, xdata, y4data, ax4), interval=time_interval)
+            ani4 = animation.FuncAnimation(fig, self.animateSide, fargs=(y4line, xdata, y4data, ax4), interval=time_interval)
 
         print "Commence data acquisition."
-        self.start_time = time.clock() + 0.4
+        self.start_time = time.clock() + 0.49
+        plt.tight_layout()
         plt.show()
 
 
