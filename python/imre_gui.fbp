@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">FrameMain</property>
             <property name="pos"></property>
-            <property name="size">689,346</property>
+            <property name="size">823,346</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass"></property>
             <property name="title">Research Is Awesome</property>
@@ -772,7 +772,7 @@
                                                     <property name="resize">Resizable</property>
                                                     <property name="selection">0</property>
                                                     <property name="show">1</property>
-                                                    <property name="size">200,-1</property>
+                                                    <property name="size">100,-1</property>
                                                     <property name="style"></property>
                                                     <property name="subclass"></property>
                                                     <property name="toolbar_pane">0</property>
@@ -810,7 +810,7 @@
                                                     <event name="OnUpdateUI"></event>
                                                 </object>
                                             </object>
-                                            <object class="sizeritem" expanded="1">
+                                            <object class="sizeritem" expanded="0">
                                                 <property name="border">5</property>
                                                 <property name="flag">wxEXPAND|wxALIGN_CENTER_HORIZONTAL</property>
                                                 <property name="proportion">1</property>
