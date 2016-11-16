@@ -33,18 +33,19 @@ class MainFrame(gui.FrameMain):
             return
 
         arduino.write(1)
+
         # split data into arrays
         raw_data = arduino.readline().rstrip().split(",")
         processed_data = ""
         
         # record time
-        recorded_time = round((time.clock() - self.start_time), 4)
+        recorded_time = round((time.clock() - self.start_time), 3)
 
         # process data
         index = 0
         for data in raw_data:
             if (index < self.chart_num):
-                new_data = round((float(data) / 1023.0 * 5.0), 4)
+                new_data = round((float(data) / 1023.0 * 5.0), 3)
                 processed_data += "\t%f" %(new_data)
                 y_array[index].append(new_data)
             index += 1
@@ -192,7 +193,7 @@ class MainFrame(gui.FrameMain):
         # begin data acquisition
         # set variables
         self.chart_num = self.choice1.GetCurrentSelection() + 1
-        time_interval = 965
+        time_interval = 500
         xdata = []
         y1data = []
         y2data = []
@@ -263,7 +264,7 @@ class MainFrame(gui.FrameMain):
             ani4 = animation.FuncAnimation(fig4, self.animateSide, fargs=(y4line, xdata, y4data, ax4), interval=time_interval)
 
         print "Commence data acquisition."
-        self.start_time = time.clock()
+        self.start_time = time.clock() + 0.4
         plt.show()
 
 
