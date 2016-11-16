@@ -51,6 +51,8 @@ class MainFrame(gui.FrameMain):
 
         # confirmation in command line
         print round(recorded_time, 1), processed_data
+        # update timer
+        self.timerDisplay.SetValue("%d" %(round(recorded_time)))
         to_be_written = "\n%f%s" %(recorded_time, processed_data)
 
         # file I/O
@@ -183,6 +185,8 @@ class MainFrame(gui.FrameMain):
         self.choice1.Disable()
         # enable end button
         self.button2.Enable()
+        # set timer to 0s
+        self.timerDisplay.SetValue("0")
 
 
         # begin data acquisition

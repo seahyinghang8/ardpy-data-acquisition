@@ -17,7 +17,7 @@ import wx.xrc
 class FrameMain ( wx.Frame ):
     
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Research Is Awesome", pos = wx.DefaultPosition, size = wx.Size( 800,345 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Research Is Awesome", pos = wx.DefaultPosition, size = wx.Size( 689,346 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
         
         self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
         
@@ -74,6 +74,20 @@ class FrameMain ( wx.Frame ):
         
         SizerBottom1.Add( SizerBottom2, 1, wx.EXPAND, 5 )
         
+        SizerTimer = wx.BoxSizer( wx.VERTICAL )
+        
+        self.text4 = wx.StaticText( self.MainPanel, wx.ID_ANY, u"Timer (s)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.text4.Wrap( -1 )
+        SizerTimer.Add( self.text4, 0, wx.ALL, 5 )
+        
+        self.timerDisplay = wx.TextCtrl( self.MainPanel, wx.ID_ANY, u"0", wx.DefaultPosition, wx.DefaultSize, wx.TE_CENTRE|wx.TE_READONLY )
+        self.timerDisplay.SetFont( wx.Font( 15, 70, 90, 90, False, wx.EmptyString ) )
+        
+        SizerTimer.Add( self.timerDisplay, 0, wx.ALL, 5 )
+        
+        
+        SizerBottom1.Add( SizerTimer, 1, wx.EXPAND, 30 )
+        
         self.text1 = wx.StaticText( self.MainPanel, wx.ID_ANY, u"Instructions:\n1. Type all required info in remarks\n2. Select number of data charts to display\n3. Click \"Start\" and type in the name for the data file\n4. Leave the charts open until experiments end\n5. Click \"End\" to save the remarks and conclude experiment\n6. Restart data acquistion or close application", wx.DefaultPosition, wx.DefaultSize, 0 )
         self.text1.Wrap( -1 )
         SizerBottom1.Add( self.text1, 0, wx.ALL, 5 )
@@ -107,3 +121,5 @@ class FrameMain ( wx.Frame ):
     
     def end( self, event ):
         event.Skip()
+    
+
