@@ -223,10 +223,10 @@ class MainFrame(gui.FrameMain):
             sp2 = 312
             sp3 = 311
         else:
-            sp1 = 414
-            sp2 = 413
-            sp3 = 412
-            sp4 = 411
+            sp1 = 221
+            sp2 = 222
+            sp3 = 223
+            sp4 = 224
 
 
         fig = plt.figure(figsize=(12,7))
