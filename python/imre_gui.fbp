@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">FrameMain</property>
             <property name="pos"></property>
-            <property name="size">750,350</property>
+            <property name="size">750,344</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass"></property>
             <property name="title">Research Is Awesome</property>
@@ -740,7 +740,7 @@
                                                     <property name="caption"></property>
                                                     <property name="caption_visible">1</property>
                                                     <property name="center_pane">0</property>
-                                                    <property name="choices">&quot;1&quot; &quot;2&quot; &quot;3&quot; &quot;4&quot;</property>
+                                                    <property name="choices">&quot;2&quot; &quot;3&quot; &quot;4&quot;</property>
                                                     <property name="close_button">1</property>
                                                     <property name="context_help"></property>
                                                     <property name="context_menu">1</property>

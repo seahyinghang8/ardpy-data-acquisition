@@ -4,14 +4,12 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import serial
 import serial.tools.list_ports as list_ports
-#import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+
 #import the GUI file 
 import imre_gui as gui
 
-# disable toolbar
-#mpl.rcParams["toolbar"] = "None"
 
 
 class MainFrame(gui.FrameMain): 
@@ -42,14 +40,14 @@ class MainFrame(gui.FrameMain):
         processed_data = ""
         
         # record time
-        recorded_time = round((time.clock() - self.start_time), 3)
+        recorded_time = round((time.clock() - self.start_time), 2)
 
         # process data
         index = 0
         for data in raw_data:
             if (index < self.chart_num):
-                new_data = round((float(data) / 1023.0 * 5.0), 3)
-                processed_data += "\t%.3f" %(new_data)
+                new_data = round((float(data) / 1023.0 * 5000.0), 2)
+                processed_data += "\t%.2f" %(new_data)
                 y_array[index].append(new_data)
             index += 1
 
@@ -57,7 +55,7 @@ class MainFrame(gui.FrameMain):
         print round(recorded_time, 1), processed_data
         # update timer
         self.timerDisplay.SetValue("%d" %(round(recorded_time)))
-        to_be_written = "\n%.3f%s" %(recorded_time, processed_data)
+        to_be_written = "\n%.2f%s" %(recorded_time, processed_data)
 
         # file I/O
         datafile = open(self.filename, "a")
@@ -195,7 +193,7 @@ class MainFrame(gui.FrameMain):
 
         # begin data acquisition
         # set variables
-        self.chart_num = self.choice1.GetCurrentSelection() + 1
+        self.chart_num = self.choice1.GetCurrentSelection() + 2
         time_interval = 500
         xdata = []
         y1data = []
@@ -218,11 +216,17 @@ class MainFrame(gui.FrameMain):
         if (self.chart_num == 1):
             sp1 = 111
         elif (self.chart_num == 2):
-            sp1 = 121
-            sp2 = 122
+            sp1 = 212
+            sp2 = 211
+        elif (self.chart_num == 3):
+            sp1 = 313
+            sp2 = 312
+            sp3 = 311
         else:
-            sp1 = 221
-            sp2 = 222
+            sp1 = 414
+            sp2 = 413
+            sp3 = 412
+            sp4 = 411
 
 
         fig = plt.figure(figsize=(12,7))
@@ -230,7 +234,7 @@ class MainFrame(gui.FrameMain):
         ax1 = fig.add_subplot(sp1)
         plt.title("Reading 1")
         plt.xlabel("Time (s)")
-        plt.ylabel("Y (mV)")
+        plt.ylabel("X (mV)")
 
         ax1.relim()
         ax1.autoscale_view()
@@ -253,7 +257,7 @@ class MainFrame(gui.FrameMain):
 
         if (self.chart_num > 2):
             # initialize subplot 3
-            ax3 = fig.add_subplot(223)
+            ax3 = fig.add_subplot(sp3)
             plt.title("Reading 3")
             plt.xlabel("Time (s)")
             plt.ylabel("Y (mV)")
@@ -266,7 +270,7 @@ class MainFrame(gui.FrameMain):
         
         if (self.chart_num > 3):
             # initialize subplot 4
-            ax4 = fig.add_subplot(224)
+            ax4 = fig.add_subplot(sp4)
             plt.title("Reading 4")
             plt.xlabel("Time (s)")
             plt.ylabel("Y (mV)")

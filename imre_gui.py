@@ -17,7 +17,7 @@ import wx.xrc
 class FrameMain ( wx.Frame ):
     
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Research Is Awesome", pos = wx.DefaultPosition, size = wx.Size( 750,350 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Research Is Awesome", pos = wx.DefaultPosition, size = wx.Size( 750,344 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
         
         self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
         
@@ -53,7 +53,7 @@ class FrameMain ( wx.Frame ):
         self.text3.Wrap( -1 )
         SizerBottom2.Add( self.text3, 0, wx.ALL, 5 )
         
-        choice1Choices = [ u"1", u"2", u"3", u"4" ]
+        choice1Choices = [ u"2", u"3", u"4" ]
         self.choice1 = wx.Choice( self.MainPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size( 100,-1 ), choice1Choices, 0 )
         self.choice1.SetSelection( 0 )
         SizerBottom2.Add( self.choice1, 0, wx.ALL, 5 )
