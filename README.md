@@ -1,4 +1,4 @@
-# Ardpy-Data-Acquisition
+# arpy_research
 
 ## Purpose
 To acquire analog signal from arduino through serial communication. Real time data is plotted and saved into data file using python
@@ -14,6 +14,7 @@ To acquire analog signal from arduino through serial communication. Real time da
 1. Download and install Anaconda Python 2.7 32-BIT Installer from https://www.continuum.io/downloads (matplotlib will be included by default)
 2. Download and install pyserial-2.7.win32.exe from https://pypi.python.org/pypi/pyserial/2.7
 3. Download and install wxPython3.0-win32-py27 from https://wxpython.org/download.php
+4. Downloand and install Arduino IDE from https://www.arduino.cc/en/Main/Software
 
 ## How To Use
 1. Upload arduino_react.ino code into the arduino
