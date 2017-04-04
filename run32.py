@@ -4,7 +4,10 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import serial
 import serial.tools.list_ports as list_ports
+
 import threading
+
+from multiprocessing import Process, Pipe
 import time
 
 #import the GUI file 
@@ -74,21 +77,41 @@ class VoltageThread(threading.Thread):
     def abort(self):
         # kill worker thread
         self._continue = 0
+        self._arduino.close()
 
-
-class AnimationThread(threading.Thread):
-    def __init__(self, parent, arduino, chart_num, filename):
+class TimerThread(threading.Thread):
+    def __init__(self, conn):
         threading.Thread.__init__(self)
 
-        self._parent = parent
+        self._conn = conn
         self._continue = 1
-        self._pause = False
-        self._arduino = arduino
-        self._chart = chart_num
-        self._filename = filename
-        self.setDaemon(1)
 
     def run(self):
+        while self._continue:
+            time = self._conn.recv()
+            wx.CallAfter(pub.sendMessage, "update_timer", time=time)
+
+
+    def abort(self):
+        self._continue = 0
+
+
+class AnimationWorker(Process):
+    def __init__(self, conn, port, chart_num, filename):
+        Process.__init__(self)
+
+        self._continue = 1
+        self._pause = False
+        self._conn = conn
+        self._port = port
+        self._chart = chart_num
+        self._filename = filename
+
+    def run(self):
+        arduino = serial.Serial(self._port, 9600, timeout=1)
+
+        time.sleep(2)
+
         time_interval = 500
         xdata = []
         y1data = []
@@ -121,7 +144,7 @@ class AnimationThread(threading.Thread):
         ax1.autoscale_view()
 
         y1line, = plt.plot([], [], "r-")
-        ani1 = animation.FuncAnimation(fig, self.animateMain, fargs=(y1line, xdata, y1data, ax1, self._arduino, y_array), interval=time_interval)
+        ani1 = animation.FuncAnimation(fig, self.animateMain, fargs=(y1line, xdata, y1data, ax1, arduino, y_array), interval=time_interval)
 
         # initialize subplot 2
         ax2 = fig.add_subplot(sp2)
@@ -163,18 +186,27 @@ class AnimationThread(threading.Thread):
         plt.tight_layout()
         plt.show()
 
-
     # animation to update graph for each data point collected
     def animateMain(self, i, line, xdata, ydata, ax, arduino, y_array):
         if not self._continue:
-            arduino.close()
-            return
+        	return
+
+        if self._conn.poll():
+            message = self._conn.recv()
+            print message
+
+            if message == 1:
+            	self._conn.send(1)
+                self._conn.close()
+                self._continue = 0
+                arduino.close()
+                return
 
         arduino.write("1")
 
         time.sleep(0.48)
 
-        if self._arduino.isOpen():
+        if arduino.isOpen():
             # split data into arrays
             raw_data = arduino.readline().rstrip().split(",")
             processed_data = ""
@@ -216,7 +248,7 @@ class AnimationThread(threading.Thread):
             print round(recorded_time, 1), processed_data
 
             # publisher to send to update the timer
-            wx.CallAfter(pub.sendMessage, "update_timer", time="%d" %(round(recorded_time)))
+            self._conn.send("%d" %(round(recorded_time)))
 
             to_be_written = "\n%.2f%s" %(recorded_time, processed_data)
 
@@ -249,10 +281,6 @@ class AnimationThread(threading.Thread):
 
         return line,
 
-    def abort(self):
-        # kill worker thread
-        self._continue = 0
-
 
 
 
@@ -276,6 +304,8 @@ class MainFrame(gui.FrameMain):
         self.arduino = ""           # arduino object
         self.worker = ""            # worker thread for updating voltage
         self.ani_worker = ""        # worker to run the animation
+        self.timer_thread = ""      # timer thread
+        self.parent_conn = ""       # parent_conn to child process
 
         # initialize the ports
         self.refresh()
@@ -387,11 +417,6 @@ class MainFrame(gui.FrameMain):
     def start(self, event):
         global port_configured
 
-        # check if any plots are still opened
-        if plt.get_fignums():
-            self.showMessage("Close all previous plots before starting new record.")
-            return
-
         # check if arduino port is available and selected. if not, cancel.
         if port_configured:
             print "Save file to begin data acquisition..."
@@ -456,20 +481,32 @@ class MainFrame(gui.FrameMain):
         # set variables
         self.chart_num = self.chartChoice.GetCurrentSelection()
 
-        # kill the existing thread
+        # kill the existing thread for updating the voltage values
         self.worker.abort()
 
-        # start animation worker
-        self.ani_worker = AnimationThread(self, self.arduino, self.chart_num, self.filename)
+        # process pipe
+        self.parent_conn, child_conn = Pipe()
+
+        # start animation process
+        self.ani_worker = AnimationWorker(child_conn, self.port, self.chart_num, self.filename)
         self.ani_worker.start()
+
+        # start timer thread
+        self.timer_thread = TimerThread(self.parent_conn)
+        self.timer_thread.start()
 
         self.statusText.SetLabel("Data acquisition started...")
        
 
     # when user clicks the end button
     def end(self, event):
+        # stop timer thread
+        self.timer_thread.abort()
         # end all animation
-        self.ani_worker.abort()
+        if self.ani_worker.is_alive():
+            self.parent_conn.send(1)
+            self.parent_conn.recv()
+            self.parent_conn.close()
 
         # get the values from the 3 lines
         line1 = self.input1.GetValue()
@@ -515,11 +552,12 @@ class MainFrame(gui.FrameMain):
 
 
 
+if __name__ == "__main__":
 
-# initialize filename
-app = wx.App(False) 
-frame = MainFrame(None) 
-frame.Show(True) 
-#start the applications
-print "Application running... Do NOT close this window."
-app.MainLoop() 
+    # initialize filename
+    app = wx.App(False) 
+    frame = MainFrame(None) 
+    frame.Show(True) 
+    #start the applications
+    print "Application running... Do NOT close this window."
+    app.MainLoop()

@@ -17,7 +17,7 @@ import wx.xrc
 class FrameMain ( wx.Frame ):
     
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Everything Is Awesome!", pos = wx.DefaultPosition, size = wx.Size( 750,357 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Everything Is Awesome!", pos = wx.DefaultPosition, size = wx.Size( 850,370 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
         
         self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
         
@@ -26,8 +26,8 @@ class FrameMain ( wx.Frame ):
         self.MainPanel = wx.Panel( self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL )
         SizerPanel = wx.BoxSizer( wx.VERTICAL )
         
-        SizerPanel.SetMinSize( wx.Size( 800,-1 ) ) 
-        self.filePicker1 = wx.FilePickerCtrl( self.MainPanel, wx.ID_ANY, wx.EmptyString, u"Select a file", u"*.*", wx.DefaultPosition, wx.Size( 800,-1 ), wx.FLP_DEFAULT_STYLE )
+        SizerPanel.SetMinSize( wx.Size( 850,-1 ) ) 
+        self.filePicker1 = wx.FilePickerCtrl( self.MainPanel, wx.ID_ANY, wx.EmptyString, u"Select a file", u"*.*", wx.DefaultPosition, wx.Size( 850,-1 ), wx.FLP_DEFAULT_STYLE )
         self.filePicker1.Enable( False )
         
         SizerPanel.Add( self.filePicker1, 0, wx.ALL, 5 )
@@ -64,7 +64,7 @@ class FrameMain ( wx.Frame ):
         self.text3.Wrap( -1 )
         SizerChart.Add( self.text3, 0, wx.ALL, 5 )
         
-        chartChoiceChoices = [ u"2 - 3", u"3", u"2" ]
+        chartChoiceChoices = [ u"2 - 3", u"2", u"3", u"4" ]
         self.chartChoice = wx.Choice( self.MainPanel, wx.ID_ANY, wx.DefaultPosition, wx.Size( 100,-1 ), chartChoiceChoices, 0 )
         self.chartChoice.SetSelection( 0 )
         SizerChart.Add( self.chartChoice, 0, wx.ALL, 5 )
@@ -72,33 +72,61 @@ class FrameMain ( wx.Frame ):
         
         SizerTop.Add( SizerChart, 1, wx.EXPAND, 5 )
         
-        SizerVoltage = wx.BoxSizer( wx.VERTICAL )
+        SizerX = wx.BoxSizer( wx.VERTICAL )
         
-        self.text4 = wx.StaticText( self.MainPanel, wx.ID_ANY, u"Voltage (mV)", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.text4.Wrap( -1 )
-        SizerVoltage.Add( self.text4, 0, wx.ALL, 5 )
+        self.xText = wx.StaticText( self.MainPanel, wx.ID_ANY, u"X (mV)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.xText.Wrap( -1 )
+        SizerX.Add( self.xText, 0, wx.ALL, 5 )
         
-        self.voltageDisplay = wx.TextCtrl( self.MainPanel, wx.ID_ANY, u"-", wx.DefaultPosition, wx.DefaultSize, wx.TE_CENTRE|wx.TE_READONLY )
-        self.voltageDisplay.SetFont( wx.Font( 15, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Sans" ) )
+        self.xDisplay = wx.TextCtrl( self.MainPanel, wx.ID_ANY, u"-", wx.DefaultPosition, wx.DefaultSize, wx.TE_CENTRE|wx.TE_READONLY )
+        self.xDisplay.SetFont( wx.Font( 15, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, "Sans" ) )
         
-        SizerVoltage.Add( self.voltageDisplay, 0, wx.ALL, 5 )
-        
-        
-        SizerTop.Add( SizerVoltage, 1, wx.EXPAND, 5 )
-        
-        SizerScale = wx.BoxSizer( wx.VERTICAL )
-        
-        self.text6 = wx.StaticText( self.MainPanel, wx.ID_ANY, u"Difference (mV)", wx.DefaultPosition, wx.DefaultSize, 0 )
-        self.text6.Wrap( -1 )
-        SizerScale.Add( self.text6, 0, wx.ALL, 5 )
-        
-        self.differenceDisplay = wx.TextCtrl( self.MainPanel, wx.ID_ANY, u"-", wx.DefaultPosition, wx.DefaultSize, wx.TE_CENTRE|wx.TE_READONLY )
-        self.differenceDisplay.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
-        
-        SizerScale.Add( self.differenceDisplay, 0, wx.ALL, 5 )
+        SizerX.Add( self.xDisplay, 0, wx.ALL, 5 )
         
         
-        SizerTop.Add( SizerScale, 1, wx.EXPAND, 5 )
+        SizerTop.Add( SizerX, 1, wx.EXPAND, 5 )
+        
+        SizerY = wx.BoxSizer( wx.VERTICAL )
+        
+        self.yText = wx.StaticText( self.MainPanel, wx.ID_ANY, u"Y (mV)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.yText.Wrap( -1 )
+        SizerY.Add( self.yText, 0, wx.ALL, 5 )
+        
+        self.yDisplay = wx.TextCtrl( self.MainPanel, wx.ID_ANY, u"-", wx.DefaultPosition, wx.DefaultSize, wx.TE_CENTRE|wx.TE_READONLY )
+        self.yDisplay.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        
+        SizerY.Add( self.yDisplay, 0, wx.ALL, 5 )
+        
+        
+        SizerTop.Add( SizerY, 1, wx.EXPAND, 5 )
+        
+        SizerZ = wx.BoxSizer( wx.VERTICAL )
+        
+        self.zText = wx.StaticText( self.MainPanel, wx.ID_ANY, u"Z (mV)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.zText.Wrap( -1 )
+        SizerZ.Add( self.zText, 0, wx.ALL, 5 )
+        
+        self.zDisplay = wx.TextCtrl( self.MainPanel, wx.ID_ANY, u"-", wx.DefaultPosition, wx.DefaultSize, wx.TE_CENTRE|wx.TE_READONLY )
+        self.zDisplay.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        
+        SizerZ.Add( self.zDisplay, 0, wx.ALL, 5 )
+        
+        
+        SizerTop.Add( SizerZ, 1, wx.EXPAND, 5 )
+        
+        SizerA = wx.BoxSizer( wx.VERTICAL )
+        
+        self.aText = wx.StaticText( self.MainPanel, wx.ID_ANY, u"A (mV)", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.aText.Wrap( -1 )
+        SizerA.Add( self.aText, 0, wx.ALL, 5 )
+        
+        self.aDisplay = wx.TextCtrl( self.MainPanel, wx.ID_ANY, u"-", wx.DefaultPosition, wx.DefaultSize, wx.TE_CENTRE|wx.TE_READONLY )
+        self.aDisplay.SetFont( wx.Font( 15, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, wx.EmptyString ) )
+        
+        SizerA.Add( self.aDisplay, 0, wx.ALL, 5 )
+        
+        
+        SizerTop.Add( SizerA, 1, wx.EXPAND, 5 )
         
         
         SizerPanel.Add( SizerTop, 1, wx.EXPAND, 5 )
@@ -107,13 +135,13 @@ class FrameMain ( wx.Frame ):
         self.text2.Wrap( -1 )
         SizerPanel.Add( self.text2, 0, wx.ALL, 5 )
         
-        self.input1 = wx.TextCtrl( self.MainPanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 800,-1 ), 0 )
+        self.input1 = wx.TextCtrl( self.MainPanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 850,-1 ), 0 )
         SizerPanel.Add( self.input1, 0, wx.ALL, 5 )
         
-        self.input2 = wx.TextCtrl( self.MainPanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 800,-1 ), wx.TE_MULTILINE )
+        self.input2 = wx.TextCtrl( self.MainPanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 850,-1 ), wx.TE_MULTILINE )
         SizerPanel.Add( self.input2, 0, wx.ALL, 5 )
         
-        self.input3 = wx.TextCtrl( self.MainPanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 800,-1 ), 0 )
+        self.input3 = wx.TextCtrl( self.MainPanel, wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.Size( 850,-1 ), 0 )
         SizerPanel.Add( self.input3, 0, wx.ALL, 5 )
         
         SizerBottomMain = wx.BoxSizer( wx.HORIZONTAL )
