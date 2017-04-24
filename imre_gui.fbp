@@ -44,7 +44,7 @@
             <property name="minimum_size"></property>
             <property name="name">FrameMain</property>
             <property name="pos"></property>
-            <property name="size">850,370</property>
+            <property name="size">850,420</property>
             <property name="style">wxDEFAULT_FRAME_STYLE</property>
             <property name="subclass"></property>
             <property name="title">Everything Is Awesome!</property>

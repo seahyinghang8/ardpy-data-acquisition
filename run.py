@@ -86,6 +86,7 @@ class AnimationThread(threading.Thread):
         self._arduino = arduino
         self._chart = chart_num
         self._filename = filename
+        self._start_time = time.time()
         self.setDaemon(1)
 
     def run(self):
@@ -158,7 +159,7 @@ class AnimationThread(threading.Thread):
 
         print "Commence data acquisition."
 
-        self.start_time = time.time() + 0.49
+        self._start_time = time.time() + 0.49
 
         plt.tight_layout()
         plt.show()
@@ -180,7 +181,7 @@ class AnimationThread(threading.Thread):
             processed_data = ""
             
             # record time
-            recorded_time = round((time.time() - self.start_time), 2)
+            recorded_time = round((time.time() - self._start_time), 2)
 
             # process data
             val1 = round((float(raw_data[0]) / 1023.0 * 5000.0), 2)
